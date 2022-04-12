@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.klinovvlad.task3klinov.databinding.ItemMainBinding
-import com.klinovvlad.task3klinov.model.DataMain
+import com.klinovvlad.task3klinov.model.DataTest
 
-class MainAdapter : ListAdapter<DataMain, MainAdapter.MainHolder>(MainUtil()) {
+class MainAdapter : ListAdapter<DataTest, MainAdapter.MainHolder>(MainUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         return MainHolder(
@@ -25,17 +25,17 @@ class MainAdapter : ListAdapter<DataMain, MainAdapter.MainHolder>(MainUtil()) {
     }
 
     class MainHolder(private val binding: ItemMainBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: DataMain, position: Int) {
+        fun bind(data: DataTest, position: Int) {
             binding.textItemName.text =
                 "${data.results[position].name.title}"
         }
     }
 
-    class MainUtil : DiffUtil.ItemCallback<DataMain>() {
-        override fun areItemsTheSame(oldItem: DataMain, newItem: DataMain): Boolean =
+    class MainUtil : DiffUtil.ItemCallback<DataTest>() {
+        override fun areItemsTheSame(oldItem: DataTest, newItem: DataTest): Boolean =
             oldItem.results == newItem.results
 
-        override fun areContentsTheSame(oldItem: DataMain, newItem: DataMain): Boolean =
+        override fun areContentsTheSame(oldItem: DataTest, newItem: DataTest): Boolean =
             oldItem == newItem
     }
 
