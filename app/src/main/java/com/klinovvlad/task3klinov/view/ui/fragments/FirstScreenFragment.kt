@@ -1,20 +1,19 @@
 package com.klinovvlad.task3klinov.view.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentFirstScreenBinding
-import com.klinovvlad.task3klinov.network.api.MainApi
 import com.klinovvlad.task3klinov.network.instances.MainInstance
 import com.klinovvlad.task3klinov.view.adapters.MainAdapter
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModel
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModelFactory
-import kotlinx.coroutines.awaitAll
 
 class FirstScreenFragment : Fragment() {
     private lateinit var firstScreenBinding: FragmentFirstScreenBinding
@@ -25,7 +24,14 @@ class FirstScreenFragment : Fragment() {
         ).get(FirstScreenViewModel::class.java)
     }
     private val mainAdapter: MainAdapter by lazy {
-        MainAdapter()
+        MainAdapter {
+            val secondFragment = SecondScreenFragment()
+            activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.replace(R.id.main_frame, secondFragment)
+                ?.addToBackStack(null)
+                ?.commit()
+        }
     }
 
     override fun onCreateView(
@@ -52,5 +58,4 @@ class FirstScreenFragment : Fragment() {
             mainAdapter.submitList(it)
         }
     }
-
 }

@@ -6,7 +6,7 @@ import retrofit2.http.GET
 
 interface MainApi {
 
-    @GET("api/?results=10")
-    fun getData(): Call<List<DataTest>>
+    @GET("api/?results=30")
+    fun getData(): Call<DataTest>
 
 }

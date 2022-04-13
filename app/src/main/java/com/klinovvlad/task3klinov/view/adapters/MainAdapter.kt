@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.klinovvlad.task3klinov.databinding.ItemMainBinding
+import com.klinovvlad.task3klinov.model.DataResult
 import com.klinovvlad.task3klinov.model.DataTest
 
-class MainAdapter : ListAdapter<DataTest, MainAdapter.MainHolder>(MainUtil()) {
+class MainAdapter(private val onItemClick: (item: DataResult) -> Unit
+) : ListAdapter<DataResult, MainAdapter.MainHolder>(MainUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         return MainHolder(
@@ -21,21 +23,24 @@ class MainAdapter : ListAdapter<DataTest, MainAdapter.MainHolder>(MainUtil()) {
     }
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
-        holder.bind(currentList[position], position)
+        holder.bind(currentList[position], onItemClick)
     }
 
     class MainHolder(private val binding: ItemMainBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: DataTest, position: Int) {
+        fun bind(data: DataResult, onItemClick: (item: DataResult) -> Unit) {
             binding.textItemName.text =
-                "${data.results[position].name.title}"
+                "${data.name.title} ${data.name.first} ${data.name.last}"
+            binding.root.setOnClickListener {
+                onItemClick(data)
+            }
         }
     }
 
-    class MainUtil : DiffUtil.ItemCallback<DataTest>() {
-        override fun areItemsTheSame(oldItem: DataTest, newItem: DataTest): Boolean =
-            oldItem.results == newItem.results
+    class MainUtil : DiffUtil.ItemCallback<DataResult>() {
+        override fun areItemsTheSame(oldItem: DataResult, newItem: DataResult): Boolean =
+            oldItem.name == newItem.name
 
-        override fun areContentsTheSame(oldItem: DataTest, newItem: DataTest): Boolean =
+        override fun areContentsTheSame(oldItem: DataResult, newItem: DataResult): Boolean =
             oldItem == newItem
     }
 
