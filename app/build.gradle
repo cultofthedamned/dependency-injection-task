@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
 }
 
 android {
@@ -58,4 +60,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    // room
+    implementation("androidx.room:room-runtime:2.4.2")
+    annotationProcessor("androidx.room:room-compiler:2.4.2")
+    kapt("androidx.room:room-compiler:2.4.2")
 }

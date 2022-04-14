@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.klinovvlad.task3klinov.databinding.ItemMainBinding
 import com.klinovvlad.task3klinov.model.DataResult
-import com.klinovvlad.task3klinov.model.DataTest
 
 class MainAdapter(private val onItemClick: (item: DataResult) -> Unit
 ) : ListAdapter<DataResult, MainAdapter.MainHolder>(MainUtil()) {

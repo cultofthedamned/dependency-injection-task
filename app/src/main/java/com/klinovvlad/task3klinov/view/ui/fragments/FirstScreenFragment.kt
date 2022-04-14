@@ -8,12 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentFirstScreenBinding
+import com.klinovvlad.task3klinov.db.MainDataBase
+import com.klinovvlad.task3klinov.model.DataMain
+import com.klinovvlad.task3klinov.model.DataResult
 import com.klinovvlad.task3klinov.network.instances.MainInstance
 import com.klinovvlad.task3klinov.view.adapters.MainAdapter
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModel
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModelFactory
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class FirstScreenFragment : Fragment() {
     private lateinit var firstScreenBinding: FragmentFirstScreenBinding
@@ -56,6 +62,12 @@ class FirstScreenFragment : Fragment() {
         }
         viewModel.dataList.observe(requireActivity()) {
             mainAdapter.submitList(it)
+            val db = Room.databaseBuilder(
+                requireContext(),
+                MainDataBase::class.java,
+                "task3klinov.db"
+            ).build()
+            db.mainDao().insertData(DataMain(it))
         }
     }
 }

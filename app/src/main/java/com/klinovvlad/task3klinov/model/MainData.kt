@@ -1,8 +1,14 @@
 package com.klinovvlad.task3klinov.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-data class DataTest(@SerializedName("results") val results: List<DataResult>)
+@Entity(tableName = "data_table")
+data class DataMain(
+    @PrimaryKey(autoGenerate = true)
+    @SerializedName("results") val results: List<DataResult>
+)
 
 data class DataResult(
     @SerializedName("gender") val gender: String,
