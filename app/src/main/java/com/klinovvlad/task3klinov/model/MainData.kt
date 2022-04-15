@@ -2,21 +2,21 @@ package com.klinovvlad.task3klinov.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
 import com.google.gson.annotations.SerializedName
+import com.klinovvlad.task3klinov.db.Converters
 
-@Entity(tableName = "data_table")
 data class DataMain(
-    @PrimaryKey(autoGenerate = true)
     @SerializedName("results") val results: List<DataResult>
 )
 
+@Entity(tableName = "data_table")
 data class DataResult(
-    @SerializedName("gender") val gender: String,
+    val gender: String,
     @SerializedName("name") val name: DataName,
-    @SerializedName("location") val location: DataLocation,
-    @SerializedName("email") val email: String,
+    @PrimaryKey val email: String,
     @SerializedName("login") val login: DataLogin,
-    @SerializedName("phone") val phone: String,
+    val phone: String,
     @SerializedName("picture") val picture: DataPicture
 )
 
@@ -24,19 +24,6 @@ data class DataName(
     val title: String,
     val first: String,
     val last: String
-)
-
-data class DataLocation(
-    val street: DataStreet,
-    val city: String,
-    val state: String,
-    val country: String
-)
-
-
-data class DataStreet(
-    val number: Int,
-    val name: String
 )
 
 data class DataLogin(

@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.main_frame, FirstScreenFragment())
-            .addToBackStack(null)
             .commit()
     }
 }

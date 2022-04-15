@@ -15,6 +15,7 @@ import com.klinovvlad.task3klinov.db.MainDataBase
 import com.klinovvlad.task3klinov.model.DataMain
 import com.klinovvlad.task3klinov.model.DataResult
 import com.klinovvlad.task3klinov.network.instances.MainInstance
+import com.klinovvlad.task3klinov.utils.BUNDLE_PUT_PRIMARY_KEY
 import com.klinovvlad.task3klinov.view.adapters.MainAdapter
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModel
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModelFactory
@@ -31,7 +32,10 @@ class FirstScreenFragment : Fragment() {
     }
     private val mainAdapter: MainAdapter by lazy {
         MainAdapter {
+            val bundle = Bundle()
+            bundle.putString(BUNDLE_PUT_PRIMARY_KEY, it.email)
             val secondFragment = SecondScreenFragment()
+            secondFragment.arguments = bundle
             activity?.supportFragmentManager
                 ?.beginTransaction()
                 ?.replace(R.id.main_frame, secondFragment)
@@ -54,7 +58,7 @@ class FirstScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getData()
+        viewModel.getDataFromNetwork(requireContext())
         firstScreenBinding.recyclerviewMain.apply {
             layoutManager = LinearLayoutManager(activity)
             setHasFixedSize(true)
@@ -62,12 +66,6 @@ class FirstScreenFragment : Fragment() {
         }
         viewModel.dataList.observe(requireActivity()) {
             mainAdapter.submitList(it)
-            val db = Room.databaseBuilder(
-                requireContext(),
-                MainDataBase::class.java,
-                "task3klinov.db"
-            ).build()
-            db.mainDao().insertData(DataMain(it))
         }
     }
 }
