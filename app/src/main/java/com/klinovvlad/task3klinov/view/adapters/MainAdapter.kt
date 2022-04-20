@@ -6,10 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.klinovvlad.task3klinov.databinding.ItemMainBinding
-import com.klinovvlad.task3klinov.model.DataResult
+import com.klinovvlad.task3klinov.model.UserNetworkEntity.UserResults
 
-class MainAdapter(private val onItemClick: (item: DataResult) -> Unit
-) : ListAdapter<DataResult, MainAdapter.MainHolder>(MainUtil()) {
+class MainAdapter(
+    private val onItemClick: (item: UserResults) -> Unit
+) : ListAdapter<UserResults, MainAdapter.MainHolder>(MainUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         return MainHolder(
@@ -26,7 +27,7 @@ class MainAdapter(private val onItemClick: (item: DataResult) -> Unit
     }
 
     class MainHolder(private val binding: ItemMainBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: DataResult, onItemClick: (item: DataResult) -> Unit) {
+        fun bind(data: UserResults, onItemClick: (item: UserResults) -> Unit) {
             binding.textItemName.text =
                 "${data.name.title} ${data.name.first} ${data.name.last}"
             binding.root.setOnClickListener {
@@ -35,11 +36,11 @@ class MainAdapter(private val onItemClick: (item: DataResult) -> Unit
         }
     }
 
-    class MainUtil : DiffUtil.ItemCallback<DataResult>() {
-        override fun areItemsTheSame(oldItem: DataResult, newItem: DataResult): Boolean =
-            oldItem.name == newItem.name
+    class MainUtil : DiffUtil.ItemCallback<UserResults>() {
+        override fun areItemsTheSame(oldItem: UserResults, newItem: UserResults): Boolean =
+            oldItem.email == newItem.email
 
-        override fun areContentsTheSame(oldItem: DataResult, newItem: DataResult): Boolean =
+        override fun areContentsTheSame(oldItem: UserResults, newItem: UserResults): Boolean =
             oldItem == newItem
     }
 

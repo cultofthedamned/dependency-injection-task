@@ -1,24 +1,23 @@
 package com.klinovvlad.task3klinov.viewmodel
 
-import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.room.Room
-import com.klinovvlad.task3klinov.db.MainDataBase
-import com.klinovvlad.task3klinov.model.DataResult
+import com.klinovvlad.task3klinov.db.UserDatabaseEntity
+import com.klinovvlad.task3klinov.model.UserRepository
 
-class SecondScreenViewModel(private val email: String) : ViewModel() {
+class SecondScreenViewModel(
+    private val email: String,
+    private val userRepository: UserRepository
+) : ViewModel() {
 
-    val item = MutableLiveData<DataResult>()
+    private val _item = MutableLiveData<UserDatabaseEntity>()
+    val item: LiveData<UserDatabaseEntity>
+        get() = _item
 
-    fun showItem(context: Context) {
-        val db = Room.databaseBuilder(
-            context,
-            MainDataBase::class.java,
-            "task3klinov.db"
-        ).build()
+    fun showItem() {
         Thread {
-            item.postValue(db.mainDao().getItemData(email))
+            _item.postValue(userRepository.getItem(email))
         }.start()
     }
 

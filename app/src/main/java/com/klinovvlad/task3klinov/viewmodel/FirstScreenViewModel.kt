@@ -1,42 +1,76 @@
 package com.klinovvlad.task3klinov.viewmodel
 
-import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.room.Room
-import com.klinovvlad.task3klinov.db.MainDataBase
-import com.klinovvlad.task3klinov.model.DataResult
-import com.klinovvlad.task3klinov.model.DataMain
-import com.klinovvlad.task3klinov.network.instances.MainInstance
+import com.klinovvlad.task3klinov.db.UserDatabaseEntity
+import com.klinovvlad.task3klinov.model.UserNetworkEntity
+import com.klinovvlad.task3klinov.model.UserNetworkEntity.UserResults
+import com.klinovvlad.task3klinov.model.UserRepository
+import com.klinovvlad.task3klinov.network.instances.UserApiInstance
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FirstScreenViewModel(private val mainInstance: MainInstance) : ViewModel() {
+class FirstScreenViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    val dataList = MutableLiveData<List<DataResult>>()
+    private val _dataList = MutableLiveData<List<UserResults>>()
+    val dataList: LiveData<List<UserResults>>
+        get() = _dataList
 
-    fun getDataFromNetwork(context: Context) {
-        val response = mainInstance.mainApi.getData()
-        val db = Room.databaseBuilder(
-            context,
-            MainDataBase::class.java,
-            "task3klinov.db"
-        ).build()
-        response.enqueue(object : Callback<DataMain?> {
-            override fun onResponse(call: Call<DataMain?>, response: Response<DataMain?>) {
-                dataList.postValue(response.body()?.results)
+    fun getDataFromNetwork() {
+        val response = UserApiInstance.userApi.getData()
+        response.enqueue(object : Callback<UserNetworkEntity?> {
+            override fun onResponse(
+                call: Call<UserNetworkEntity?>,
+                response: Response<UserNetworkEntity?>
+            ) {
+                _dataList.postValue(response.body()?.results)
                 Thread {
-                    db.clearAllTables()
-                    db.mainDao().insertData(response.body()?.results)
+                    userRepository.clearAllData()
+                    userRepository.insertData(response.body()?.results!!.toUserEntity())
                 }.start()
             }
 
-            override fun onFailure(call: Call<DataMain?>, t: Throwable) {
+            override fun onFailure(call: Call<UserNetworkEntity?>, t: Throwable) {
                 Thread {
-                    dataList.postValue(db.mainDao().getAllData())
+                    _dataList.postValue(userRepository.allData.toUserResults())
                 }.start()
             }
         })
     }
+
+    fun List<UserResults>.toUserEntity(): List<UserDatabaseEntity> {
+        val items = (0 until 30).map { i ->
+            UserDatabaseEntity(
+                gender = get(i).gender,
+                title = get(i).name.title,
+                first = get(i).name.first,
+                last = get(i).name.last,
+                email = get(i).email,
+                uuid = get(i).login.uuid,
+                username = get(i).login.username,
+                password = get(i).login.password,
+                phone = get(i).phone,
+                large = get(i).picture.large,
+                medium = get(i).picture.medium
+            )
+        }
+        return items
+    }
+
+    fun List<UserDatabaseEntity>.toUserResults(): List<UserResults> {
+        val items = (0 until 30).map { i ->
+            UserResults(
+                gender = get(i).gender,
+                name = UserNetworkEntity.UserName(get(i).title, get(i).first, get(i).last),
+                email = get(i).email,
+                login = UserNetworkEntity.UserLogin(get(i).uuid, get(i).username, get(i).password),
+                phone = get(i).phone,
+                picture = UserNetworkEntity.UserPicture(get(i).large, get(i).medium)
+            )
+        }
+        return items
+    }
+
 }

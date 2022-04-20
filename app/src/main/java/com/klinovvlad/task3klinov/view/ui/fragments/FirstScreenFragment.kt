@@ -1,39 +1,36 @@
 package com.klinovvlad.task3klinov.view.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentFirstScreenBinding
-import com.klinovvlad.task3klinov.db.MainDataBase
-import com.klinovvlad.task3klinov.model.DataMain
-import com.klinovvlad.task3klinov.model.DataResult
-import com.klinovvlad.task3klinov.network.instances.MainInstance
-import com.klinovvlad.task3klinov.utils.BUNDLE_PUT_PRIMARY_KEY
+import com.klinovvlad.task3klinov.db.UserDatabase
+import com.klinovvlad.task3klinov.model.UserRepository
+import com.klinovvlad.task3klinov.utils.BUNDLE_USER_EMAIL
 import com.klinovvlad.task3klinov.view.adapters.MainAdapter
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModel
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModelFactory
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class FirstScreenFragment : Fragment() {
     private lateinit var firstScreenBinding: FragmentFirstScreenBinding
+    private val database: UserDatabase by lazy {
+        UserDatabase.getDatabase(requireContext())
+    }
     private val viewModel: FirstScreenViewModel by lazy {
         ViewModelProvider(
             requireActivity(),
-            FirstScreenViewModelFactory(MainInstance)
+            FirstScreenViewModelFactory(UserRepository(database.mainDao()))
         ).get(FirstScreenViewModel::class.java)
     }
     private val mainAdapter: MainAdapter by lazy {
         MainAdapter {
             val bundle = Bundle()
-            bundle.putString(BUNDLE_PUT_PRIMARY_KEY, it.email)
+            bundle.putString(BUNDLE_USER_EMAIL, it.email)
             val secondFragment = SecondScreenFragment()
             secondFragment.arguments = bundle
             activity?.supportFragmentManager
@@ -58,13 +55,13 @@ class FirstScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getDataFromNetwork(requireContext())
+        viewModel.getDataFromNetwork()
         firstScreenBinding.recyclerviewMain.apply {
             layoutManager = LinearLayoutManager(activity)
             setHasFixedSize(true)
             adapter = mainAdapter
         }
-        viewModel.dataList.observe(requireActivity()) {
+        viewModel.dataList.observe(viewLifecycleOwner) {
             mainAdapter.submitList(it)
         }
     }
