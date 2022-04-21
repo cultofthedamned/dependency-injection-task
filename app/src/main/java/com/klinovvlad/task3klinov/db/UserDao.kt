@@ -8,8 +8,8 @@ interface UserDao {
     @Insert
     fun insertData(data: List<UserDatabaseEntity>)
 
-    @Query("SELECT * FROM user WHERE email LIKE :email")
-    fun getItemData(email: String?): UserDatabaseEntity
+    @Query("SELECT * FROM user WHERE uuid LIKE :uuid")
+    fun getItemData(uuid: String?): UserDatabaseEntity
 
     @Query("SELECT * FROM user")
     fun getAllData(): List<UserDatabaseEntity>

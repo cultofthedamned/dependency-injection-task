@@ -11,7 +11,7 @@ import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentFirstScreenBinding
 import com.klinovvlad.task3klinov.db.UserDatabase
 import com.klinovvlad.task3klinov.model.UserRepository
-import com.klinovvlad.task3klinov.utils.BUNDLE_USER_EMAIL
+import com.klinovvlad.task3klinov.utils.BUNDLE_USER_UUID
 import com.klinovvlad.task3klinov.view.adapters.MainAdapter
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModel
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModelFactory
@@ -23,14 +23,14 @@ class FirstScreenFragment : Fragment() {
     }
     private val viewModel: FirstScreenViewModel by lazy {
         ViewModelProvider(
-            requireActivity(),
+            viewModelStore,
             FirstScreenViewModelFactory(UserRepository(database.mainDao()))
         ).get(FirstScreenViewModel::class.java)
     }
     private val mainAdapter: MainAdapter by lazy {
-        MainAdapter {
+        MainAdapter({
             val bundle = Bundle()
-            bundle.putString(BUNDLE_USER_EMAIL, it.email)
+            bundle.putString(BUNDLE_USER_UUID, it.login.uuid)
             val secondFragment = SecondScreenFragment()
             secondFragment.arguments = bundle
             activity?.supportFragmentManager
@@ -38,7 +38,7 @@ class FirstScreenFragment : Fragment() {
                 ?.replace(R.id.main_frame, secondFragment)
                 ?.addToBackStack(null)
                 ?.commit()
-        }
+        }, requireContext())
     }
 
     override fun onCreateView(

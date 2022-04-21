@@ -7,7 +7,7 @@ import com.klinovvlad.task3klinov.db.UserDatabaseEntity
 import com.klinovvlad.task3klinov.model.UserRepository
 
 class SecondScreenViewModel(
-    private val email: String,
+    private val uuid: String,
     private val userRepository: UserRepository
 ) : ViewModel() {
 
@@ -17,7 +17,7 @@ class SecondScreenViewModel(
 
     fun showItem() {
         Thread {
-            _item.postValue(userRepository.getItem(email))
+            _item.postValue(userRepository.getItem(uuid))
         }.start()
     }
 

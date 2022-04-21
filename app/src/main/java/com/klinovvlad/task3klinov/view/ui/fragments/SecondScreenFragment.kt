@@ -7,10 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentSecondScreenBinding
 import com.klinovvlad.task3klinov.db.UserDatabase
 import com.klinovvlad.task3klinov.model.UserRepository
-import com.klinovvlad.task3klinov.utils.BUNDLE_USER_EMAIL
+import com.klinovvlad.task3klinov.utils.BUNDLE_USER_UUID
 import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModel
 import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModelFactory
 
@@ -21,9 +22,9 @@ class SecondScreenFragment : Fragment() {
     }
     private val viewModel: SecondScreenViewModel by lazy {
         ViewModelProvider(
-            requireActivity(),
+            viewModelStore,
             SecondScreenViewModelFactory(
-                requireArguments().getString(BUNDLE_USER_EMAIL) ?: "",
+                requireArguments().getString(BUNDLE_USER_UUID) ?: "",
                 UserRepository(database.mainDao())
             )
         ).get(SecondScreenViewModel::class.java)
@@ -48,7 +49,12 @@ class SecondScreenFragment : Fragment() {
             Glide.with(view)
                 .load(it.large)
                 .into(secondScreenBinding.profilePicSecondscreen)
-            secondScreenBinding.fullnameSecondscreen.text = "${it.title} ${it.first} ${it.last}"
+            secondScreenBinding.fullnameSecondscreen.text = getString(
+                R.string.full_name,
+                it.title,
+                it.first,
+                it.last
+            )
             secondScreenBinding.phoneNumberSecondscreen.text = it.phone
             secondScreenBinding.emailSecondscreen.text = it.email
             secondScreenBinding.uuidSecondscreen.text = it.uuid
