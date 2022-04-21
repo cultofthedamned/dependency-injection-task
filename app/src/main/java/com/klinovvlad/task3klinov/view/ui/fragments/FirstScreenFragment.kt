@@ -30,7 +30,7 @@ class FirstScreenFragment : Fragment() {
     private val mainAdapter: MainAdapter by lazy {
         MainAdapter({
             val bundle = Bundle()
-            bundle.putString(BUNDLE_USER_UUID, it.login.uuid)
+            bundle.putString(BUNDLE_USER_UUID, it.uuid)
             val secondFragment = SecondScreenFragment()
             secondFragment.arguments = bundle
             activity?.supportFragmentManager

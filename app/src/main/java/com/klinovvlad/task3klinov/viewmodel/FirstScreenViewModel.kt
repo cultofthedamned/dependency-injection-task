@@ -5,19 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.klinovvlad.task3klinov.db.UserDatabaseEntity
 import com.klinovvlad.task3klinov.model.UserNetworkEntity
-import com.klinovvlad.task3klinov.model.UserNetworkEntity.UserResults
 import com.klinovvlad.task3klinov.model.UserRepository
 import com.klinovvlad.task3klinov.network.instances.UserApiInstance
 import com.klinovvlad.task3klinov.utils.toUserEntity
-import com.klinovvlad.task3klinov.utils.toUserResults
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class FirstScreenViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    private val _dataList = MutableLiveData<List<UserResults>>()
-    val dataList: LiveData<List<UserResults>>
+    private val _dataList = MutableLiveData<List<UserDatabaseEntity>>()
+    val dataList: LiveData<List<UserDatabaseEntity>>
         get() = _dataList
 
     fun getDataFromNetwork() {
@@ -27,7 +25,7 @@ class FirstScreenViewModel(private val userRepository: UserRepository) : ViewMod
                 call: Call<UserNetworkEntity?>,
                 response: Response<UserNetworkEntity?>
             ) {
-                _dataList.postValue(response.body()?.results)
+                _dataList.postValue(response.body()?.results!!.toUserEntity())
                 Thread {
                     userRepository.clearAllData()
                     userRepository.insertData(response.body()?.results!!.toUserEntity())
@@ -36,7 +34,7 @@ class FirstScreenViewModel(private val userRepository: UserRepository) : ViewMod
 
             override fun onFailure(call: Call<UserNetworkEntity?>, t: Throwable) {
                 Thread {
-                    _dataList.postValue(userRepository.allData.toUserResults())
+                    _dataList.postValue(userRepository.allData)
                 }.start()
             }
         })

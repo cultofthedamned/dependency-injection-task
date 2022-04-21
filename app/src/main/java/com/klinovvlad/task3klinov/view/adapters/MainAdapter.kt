@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.ItemMainBinding
-import com.klinovvlad.task3klinov.model.UserNetworkEntity.UserResults
+import com.klinovvlad.task3klinov.db.UserDatabaseEntity
 
 class MainAdapter(
-    private val onItemClick: (item: UserResults) -> Unit,
+    private val onItemClick: (item: UserDatabaseEntity) -> Unit,
     private val context: Context
-) : ListAdapter<UserResults, MainAdapter.MainHolder>(MainUtil()) {
+) : ListAdapter<UserDatabaseEntity, MainAdapter.MainHolder>(MainUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         return MainHolder(
@@ -30,12 +30,16 @@ class MainAdapter(
     }
 
     class MainHolder(private val binding: ItemMainBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: UserResults, onItemClick: (item: UserResults) -> Unit, context: Context) {
+        fun bind(
+            data: UserDatabaseEntity,
+            onItemClick: (item: UserDatabaseEntity) -> Unit,
+            context: Context
+        ) {
             binding.textItemName.text = context.getString(
                 R.string.full_name,
-                data.name.title,
-                data.name.first,
-                data.name.last
+                data.title,
+                data.first,
+                data.last
             )
             binding.root.setOnClickListener {
                 onItemClick(data)
@@ -43,12 +47,16 @@ class MainAdapter(
         }
     }
 
-    class MainUtil : DiffUtil.ItemCallback<UserResults>() {
-        override fun areItemsTheSame(oldItem: UserResults, newItem: UserResults): Boolean =
-            oldItem.login.uuid == newItem.login.uuid
+    class MainUtil : DiffUtil.ItemCallback<UserDatabaseEntity>() {
+        override fun areItemsTheSame(
+            oldItem: UserDatabaseEntity,
+            newItem: UserDatabaseEntity
+        ): Boolean = oldItem.uuid == newItem.uuid
 
-        override fun areContentsTheSame(oldItem: UserResults, newItem: UserResults): Boolean =
-            oldItem == newItem
+        override fun areContentsTheSame(
+            oldItem: UserDatabaseEntity,
+            newItem: UserDatabaseEntity
+        ): Boolean = oldItem == newItem
     }
 
 }
