@@ -42,11 +42,11 @@ class SecondScreenFragment : Fragment() {
         return secondScreenBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) =
-        with(secondScreenBinding) {
-            super.onViewCreated(view, savedInstanceState)
-            viewModel.showItem()
-            viewModel.item.observe(viewLifecycleOwner) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.showItem()
+        viewModel.item.observe(viewLifecycleOwner) {
+            with(secondScreenBinding) {
                 Glide.with(view)
                     .load(it.large)
                     .into(profilePicSecondscreen)
@@ -63,4 +63,5 @@ class SecondScreenFragment : Fragment() {
                 passwordSecondscreen.text = it.password
             }
         }
+    }
 }
