@@ -55,7 +55,7 @@ class FirstScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getDataFromNetwork()
+        viewModel.getUsers()
         firstScreenBinding.recyclerviewMain.apply {
             layoutManager = LinearLayoutManager(activity)
             setHasFixedSize(true)

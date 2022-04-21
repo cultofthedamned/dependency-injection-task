@@ -42,24 +42,25 @@ class SecondScreenFragment : Fragment() {
         return secondScreenBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.showItem()
-        viewModel.item.observe(viewLifecycleOwner) {
-            Glide.with(view)
-                .load(it.large)
-                .into(secondScreenBinding.profilePicSecondscreen)
-            secondScreenBinding.fullnameSecondscreen.text = getString(
-                R.string.full_name,
-                it.title,
-                it.first,
-                it.last
-            )
-            secondScreenBinding.phoneNumberSecondscreen.text = it.phone
-            secondScreenBinding.emailSecondscreen.text = it.email
-            secondScreenBinding.uuidSecondscreen.text = it.uuid
-            secondScreenBinding.usernameSecondscreen.text = it.username
-            secondScreenBinding.passwordSecondscreen.text = it.password
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) =
+        with(secondScreenBinding) {
+            super.onViewCreated(view, savedInstanceState)
+            viewModel.showItem()
+            viewModel.item.observe(viewLifecycleOwner) {
+                Glide.with(view)
+                    .load(it.large)
+                    .into(profilePicSecondscreen)
+                fullnameSecondscreen.text = getString(
+                    R.string.full_name,
+                    it.title,
+                    it.first,
+                    it.last
+                )
+                phoneNumberSecondscreen.text = it.phone
+                emailSecondscreen.text = it.email
+                uuidSecondscreen.text = it.uuid
+                usernameSecondscreen.text = it.username
+                passwordSecondscreen.text = it.password
+            }
         }
-    }
 }
