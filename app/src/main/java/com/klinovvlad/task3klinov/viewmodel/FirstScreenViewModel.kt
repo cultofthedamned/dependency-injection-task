@@ -7,6 +7,7 @@ import com.klinovvlad.task3klinov.db.UserDatabaseEntity
 import com.klinovvlad.task3klinov.model.UserNetworkEntity
 import com.klinovvlad.task3klinov.model.UserRepository
 import com.klinovvlad.task3klinov.network.instances.UserApiInstance
+import com.klinovvlad.task3klinov.utils.USER_DATABASE_LIMIT
 import com.klinovvlad.task3klinov.utils.toUserDatabaseEntity
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,7 +15,7 @@ import retrofit2.Response
 
 class FirstScreenViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    private val _offset = MutableLiveData<Int>()
+    private val _offset: Int? = null
 
     private val _dataList = MutableLiveData<List<UserDatabaseEntity>>()
     val dataList: LiveData<List<UserDatabaseEntity>>
@@ -43,9 +44,9 @@ class FirstScreenViewModel(private val userRepository: UserRepository) : ViewMod
             override fun onFailure(call: Call<UserNetworkEntity?>, t: Throwable) {
                 Thread {
                     val currentUsers = _dataList.value ?: emptyList()
-                    val offset = _offset.value ?: 0
+                    val offset = _offset ?: 0
                     _dataList.postValue(currentUsers + userRepository.getPageData(offset))
-                    _offset.postValue(offset + 30)
+                    offset + USER_DATABASE_LIMIT
                 }.start()
             }
         })
