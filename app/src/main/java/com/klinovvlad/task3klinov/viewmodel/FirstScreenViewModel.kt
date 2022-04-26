@@ -28,9 +28,12 @@ class FirstScreenViewModel(private val userRepository: UserRepository) : ViewMod
                 val users = response.body()?.results?.map {
                     it.toUserDatabaseEntity()
                 } ?: emptyList()
-                _dataList.postValue(users)
+                val currentUsers = _dataList.value ?: emptyList()
+                _dataList.postValue(currentUsers + users)
                 Thread {
-                    userRepository.clearAllData()
+                    if (currentUsers.isEmpty()) {
+                        userRepository.clearAllData()
+                    }
                     userRepository.insertData(users)
                 }.start()
             }

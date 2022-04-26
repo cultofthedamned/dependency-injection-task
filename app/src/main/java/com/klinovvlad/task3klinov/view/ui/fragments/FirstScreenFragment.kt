@@ -28,7 +28,7 @@ class FirstScreenFragment : Fragment() {
         ).get(FirstScreenViewModel::class.java)
     }
     private val mainAdapter: MainAdapter by lazy {
-        MainAdapter({
+        MainAdapter(onItemClick = {
             val bundle = Bundle()
             bundle.putString(BUNDLE_USER_UUID, it.uuid)
             val secondFragment = SecondScreenFragment()
@@ -38,7 +38,9 @@ class FirstScreenFragment : Fragment() {
                 ?.replace(R.id.main_frame, secondFragment)
                 ?.addToBackStack(null)
                 ?.commit()
-        }, requireContext())
+        }, onPageEndReached = {
+            viewModel.getUsers()
+        })
     }
 
     override fun onCreateView(
