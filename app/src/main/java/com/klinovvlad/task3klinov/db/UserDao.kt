@@ -14,6 +14,9 @@ interface UserDao {
     @Query("SELECT * FROM user")
     fun getAllData(): List<UserDatabaseEntity>
 
+    @Query("SELECT * FROM user LIMIT 30 OFFSET :offset")
+    fun getPageData(offset: Int): List<UserDatabaseEntity>
+
     @Query("DELETE FROM user")
     fun deleteAllData()
 

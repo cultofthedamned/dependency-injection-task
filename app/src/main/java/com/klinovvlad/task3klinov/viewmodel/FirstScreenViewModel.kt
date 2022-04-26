@@ -14,6 +14,8 @@ import retrofit2.Response
 
 class FirstScreenViewModel(private val userRepository: UserRepository) : ViewModel() {
 
+    private val _offset = MutableLiveData<Int>()
+
     private val _dataList = MutableLiveData<List<UserDatabaseEntity>>()
     val dataList: LiveData<List<UserDatabaseEntity>>
         get() = _dataList
@@ -40,7 +42,10 @@ class FirstScreenViewModel(private val userRepository: UserRepository) : ViewMod
 
             override fun onFailure(call: Call<UserNetworkEntity?>, t: Throwable) {
                 Thread {
-                    _dataList.postValue(userRepository.getAllData())
+                    val currentUsers = _dataList.value ?: emptyList()
+                    val offset = _offset.value ?: 0
+                    _dataList.postValue(currentUsers + userRepository.getPageData(offset))
+                    _offset.postValue(offset + 30)
                 }.start()
             }
         })

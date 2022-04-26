@@ -13,8 +13,8 @@ class UserRepository(private val userDao: UserDao) {
         userDao.deleteAllData()
     }
 
-    fun getAllData(): List<UserDatabaseEntity> {
-        return userDao.getAllData()
+    fun getPageData(offset: Int): List<UserDatabaseEntity> {
+        return userDao.getPageData(offset)
     }
 
     fun getItem(data: String): UserDatabaseEntity {
