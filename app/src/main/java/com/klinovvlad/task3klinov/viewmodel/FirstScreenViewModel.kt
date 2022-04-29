@@ -5,6 +5,6 @@ import com.klinovvlad.task3klinov.model.*
 
 class FirstScreenViewModel(userRepository: UserRepository) : ViewModel() {
 
-    val userData = UserDataFromSource(Data(userRepository)).getData()
+    val userData = UserDataDecorator(GetUserDataDecorator(userRepository)).getData()
 
 }

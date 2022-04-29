@@ -18,7 +18,7 @@ abstract class UserDataHolder {
     abstract fun getData(): LiveData<List<UserDatabaseEntity>>
 }
 
-class Data(private val userRepository: UserRepository) : UserDataHolder() {
+class GetUserDataDecorator(private val userRepository: UserRepository) : UserDataHolder() {
     private val _offset: Int? = null
     private val _dataList = MutableLiveData<List<UserDatabaseEntity>>()
     private val dataList: LiveData<List<UserDatabaseEntity>>
@@ -58,7 +58,7 @@ class Data(private val userRepository: UserRepository) : UserDataHolder() {
 
 }
 
-class UserDataFromSource(
+class UserDataDecorator(
     private val userDataHolder: UserDataHolder
 ) : UserDecorator() {
 
