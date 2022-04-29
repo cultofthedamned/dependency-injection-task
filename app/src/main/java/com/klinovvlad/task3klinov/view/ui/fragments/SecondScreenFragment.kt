@@ -18,7 +18,7 @@ import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModelFactory
 class SecondScreenFragment : Fragment() {
     private lateinit var secondScreenBinding: FragmentSecondScreenBinding
     private val database: UserDatabase by lazy {
-        UserDatabase.getDatabase(requireContext())
+        UserDatabase.getInstance(requireContext())
     }
     private val viewModel: SecondScreenViewModel by lazy {
         ViewModelProvider(

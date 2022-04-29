@@ -1,7 +1,6 @@
 package com.klinovvlad.task3klinov.view.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +19,7 @@ import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModelFactory
 class FirstScreenFragment : Fragment() {
     private lateinit var firstScreenBinding: FragmentFirstScreenBinding
     private val database: UserDatabase by lazy {
-        UserDatabase.getDatabase(requireContext())
+        UserDatabase.getInstance(requireContext())
     }
     private val viewModel: FirstScreenViewModel by lazy {
         ViewModelProvider(
@@ -40,7 +39,7 @@ class FirstScreenFragment : Fragment() {
                 ?.addToBackStack(null)
                 ?.commit()
         }, onPageEndReached = {
-            viewModel.getUsers()
+            viewModel.userData
         })
     }
 
@@ -58,13 +57,12 @@ class FirstScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getUsers()
         firstScreenBinding.recyclerviewMain.apply {
             layoutManager = LinearLayoutManager(activity)
             setHasFixedSize(true)
             adapter = mainAdapter
         }
-        viewModel.dataList.observe(viewLifecycleOwner) {
+        viewModel.userData.observe(viewLifecycleOwner) {
             mainAdapter.submitList(it)
         }
     }
