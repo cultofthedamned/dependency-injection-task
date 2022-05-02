@@ -2,15 +2,17 @@ package com.klinovvlad.task3klinov.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.klinovvlad.task3klinov.model.UserRepository
+import com.klinovvlad.task3klinov.model.UserDatabaseRepository
+import com.klinovvlad.task3klinov.model.UserNetworkRepository
 
 class FirstScreenViewModelFactory(
-    private val userRepository: UserRepository
+    private val userDatabaseRepository: UserDatabaseRepository,
+    private val userNetworkRepository: UserNetworkRepository
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FirstScreenViewModel::class.java)) {
-            return FirstScreenViewModel(userRepository) as T
+            return FirstScreenViewModel(userDatabaseRepository, userNetworkRepository) as T
         }
         throw IllegalArgumentException("UnknownViewModel")
     }

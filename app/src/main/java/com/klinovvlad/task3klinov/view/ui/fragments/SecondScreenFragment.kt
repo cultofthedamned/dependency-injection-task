@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentSecondScreenBinding
 import com.klinovvlad.task3klinov.db.UserDatabase
-import com.klinovvlad.task3klinov.model.UserRepository
+import com.klinovvlad.task3klinov.model.UserDatabaseRepository
 import com.klinovvlad.task3klinov.utils.BUNDLE_USER_UUID
 import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModel
 import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModelFactory
@@ -25,7 +25,7 @@ class SecondScreenFragment : Fragment() {
             viewModelStore,
             SecondScreenViewModelFactory(
                 requireArguments().getString(BUNDLE_USER_UUID) ?: "",
-                UserRepository(database.mainDao())
+                UserDatabaseRepository(database.mainDao())
             )
         ).get(SecondScreenViewModel::class.java)
     }

@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.klinovvlad.task3klinov.db.UserDatabaseEntity
-import com.klinovvlad.task3klinov.model.UserRepository
+import com.klinovvlad.task3klinov.model.UserDatabaseRepository
 
 class SecondScreenViewModel(
     private val uuid: String,
-    private val userRepository: UserRepository
+    private val userDatabaseRepository: UserDatabaseRepository
 ) : ViewModel() {
 
     private val _item = MutableLiveData<UserDatabaseEntity>()
@@ -17,7 +17,7 @@ class SecondScreenViewModel(
 
     fun showItem() {
         Thread {
-            _item.postValue(userRepository.getItem(uuid))
+            _item.postValue(userDatabaseRepository.getItem(uuid))
         }.start()
     }
 

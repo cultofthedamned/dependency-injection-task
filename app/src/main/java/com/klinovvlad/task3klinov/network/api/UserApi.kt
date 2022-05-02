@@ -1,6 +1,5 @@
 package com.klinovvlad.task3klinov.network.api
 
-import android.content.Context
 import com.klinovvlad.task3klinov.model.UserNetworkEntity
 import com.klinovvlad.task3klinov.utils.GET_MAIN_API
 import com.klinovvlad.task3klinov.utils.MAIN_BASE_URL
