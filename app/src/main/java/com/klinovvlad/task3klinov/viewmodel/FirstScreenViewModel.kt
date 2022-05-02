@@ -1,5 +1,7 @@
 package com.klinovvlad.task3klinov.viewmodel
 
+import android.app.Application
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,22 +9,18 @@ import com.klinovvlad.task3klinov.db.UserDatabaseEntity
 import com.klinovvlad.task3klinov.model.*
 
 class FirstScreenViewModel(
-    userDatabaseRepository: UserDatabaseRepository,
-    userNetworkRepository: UserNetworkRepository
+    private val userDecorator: UserDecorator
 ) : ViewModel() {
 
     private val _dataList = MutableLiveData<List<UserDatabaseEntity>>()
     val dataList: LiveData<List<UserDatabaseEntity>>
         get() = _dataList
 
-    val userData =
-        UserDataDecorator(
-            GetUserDataDecorator(
-                userDatabaseRepository,
-                userNetworkRepository,
-                getData = {
-                    _dataList.postValue(it)
-                }
-            )
-        ).getDataFromSource()
+    fun postData() {
+        GetUserDataDecorator.getInstance(context = Application()).getUsersData { users ->
+            _dataList.postValue(users)
+        }
+        //userDecorator.getUsersData { users -> _dataList.postValue(users) }
+    }
+
 }

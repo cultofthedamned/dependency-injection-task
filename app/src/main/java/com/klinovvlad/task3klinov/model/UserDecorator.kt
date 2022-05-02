@@ -1,25 +1,30 @@
 package com.klinovvlad.task3klinov.model
 
+import android.content.Context
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import com.klinovvlad.task3klinov.db.UserDatabase
 import com.klinovvlad.task3klinov.db.UserDatabaseEntity
+import com.klinovvlad.task3klinov.network.api.UserApi
 import com.klinovvlad.task3klinov.utils.USER_DATABASE_LIMIT
 import com.klinovvlad.task3klinov.utils.toUserDatabaseEntity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-abstract class UserDecorator {
-    abstract fun getDataFromSource()
+interface UserDecorator {
+    fun getUsersData(getData: (users: List<UserDatabaseEntity>) -> Unit)
+    fun getUserData(uuid: String, getUser: (user: UserDatabaseEntity) -> Unit)
 }
 
 class GetUserDataDecorator(
     private val userDatabaseRepository: UserDatabaseRepository,
     private val userNetworkRepository: UserNetworkRepository,
-    private val getData: (users: List<UserDatabaseEntity>) -> Unit
-) : UserDecorator() {
+    private val pagingOffset: Int? = null
+) : UserDecorator {
+    private val pagingDataList = MutableLiveData<List<UserDatabaseEntity>>()
 
-    override fun getDataFromSource() {
-        var usersList: List<UserDatabaseEntity>? = null
-        val _offset: Int? = null
+    override fun getUsersData(getData: (users: List<UserDatabaseEntity>) -> Unit) {
         val response = userNetworkRepository.getNetworkData()
         response.enqueue(object : Callback<UserNetworkEntity?> {
             override fun onResponse(
@@ -29,11 +34,11 @@ class GetUserDataDecorator(
                 val users = response.body()?.results?.map {
                     it.toUserDatabaseEntity()
                 } ?: emptyList()
-                getData(users)
-                val currentUsers = usersList ?: emptyList()
-                usersList = users
+                val currentUsers = pagingDataList.value ?: emptyList()
+                getData(currentUsers + users)
+                pagingDataList.postValue(currentUsers + users)
                 Thread {
-                    if(currentUsers.isEmpty()) {
+                    if (currentUsers.isEmpty()) {
                         userDatabaseRepository.clearAllData()
                     }
                     userDatabaseRepository.insertData(users)
@@ -42,23 +47,44 @@ class GetUserDataDecorator(
 
             override fun onFailure(call: Call<UserNetworkEntity?>, t: Throwable) {
                 Thread {
-                    val currentUsers = usersList ?: emptyList()
-                    val offset = _offset ?: 0
+                    val currentUsers = pagingDataList.value ?: emptyList()
+                    val offset = pagingOffset ?: 0
+                    Log.d("resp1", "$offset")
                     getData(currentUsers + userDatabaseRepository.getPageData(offset))
-                    offset + USER_DATABASE_LIMIT
+                    pagingDataList.postValue(userDatabaseRepository.getPageData(offset))
+                    offset.plus(USER_DATABASE_LIMIT)
+                    Log.d("resp1", "$offset")
                 }.start()
             }
         })
     }
 
-}
+    override fun getUserData(uuid: String, getUser: (user: UserDatabaseEntity) -> Unit) {
+        Thread {
+            getUser(userDatabaseRepository.getItem(uuid))
+        }.start()
+    }
 
-class UserDataDecorator(
-    private val userDataHolder: UserDecorator
-) : UserDecorator() {
+    companion object {
+        @Volatile
+        private var INSTANCE: GetUserDataDecorator? = null
+        private val LOCK = Any()
 
-    override fun getDataFromSource() {
-        return userDataHolder.getDataFromSource()
+        fun getInstance(context: Context): GetUserDataDecorator {
+            if (INSTANCE == null) {
+                synchronized(LOCK) {
+                    if (INSTANCE == null) {
+                        INSTANCE = GetUserDataDecorator(
+                            UserDatabaseRepository(
+                                UserDatabase.getInstance(context).mainDao()
+                            ),
+                            UserNetworkRepository(UserApi)
+                        )
+                    }
+                }
+            }
+            return INSTANCE!!
+        }
     }
 
 }

@@ -11,6 +11,8 @@ import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentSecondScreenBinding
 import com.klinovvlad.task3klinov.db.UserDatabase
 import com.klinovvlad.task3klinov.model.UserDatabaseRepository
+import com.klinovvlad.task3klinov.model.UserNetworkRepository
+import com.klinovvlad.task3klinov.network.api.UserApi
 import com.klinovvlad.task3klinov.utils.BUNDLE_USER_UUID
 import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModel
 import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModelFactory
@@ -25,7 +27,8 @@ class SecondScreenFragment : Fragment() {
             viewModelStore,
             SecondScreenViewModelFactory(
                 requireArguments().getString(BUNDLE_USER_UUID) ?: "",
-                UserDatabaseRepository(database.mainDao())
+                UserDatabaseRepository(database.mainDao()),
+                UserNetworkRepository(UserApi)
             )
         ).get(SecondScreenViewModel::class.java)
     }
@@ -44,7 +47,7 @@ class SecondScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.showItem()
+        viewModel.postUser()
         viewModel.item.observe(viewLifecycleOwner) {
             with(secondScreenBinding) {
                 Glide.with(view)
