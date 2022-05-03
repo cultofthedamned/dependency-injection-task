@@ -1,8 +1,6 @@
 package com.klinovvlad.task3klinov.model
 
 import android.content.Context
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import com.klinovvlad.task3klinov.db.UserDatabase
 import com.klinovvlad.task3klinov.db.UserDatabaseEntity
 import com.klinovvlad.task3klinov.network.api.UserApi
