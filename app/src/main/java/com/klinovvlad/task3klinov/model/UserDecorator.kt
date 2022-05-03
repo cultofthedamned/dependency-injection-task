@@ -55,7 +55,6 @@ class GetUserDataDecorator(
                     val currentUsers = pagingDataList
                     onUsersReceived(currentUsers + userDatabaseRepository.getPageData(offset))
                     pagingDataList = currentUsers + userDatabaseRepository.getPageData(offset)
-                    // offset + pageSize
                 }.start()
             }
         })
