@@ -11,14 +11,14 @@ class SecondScreenViewModel(
     private val userDecorator: UserDecorator
 ) : ViewModel() {
 
-    private val _item = MutableLiveData<UserDatabaseEntity>()
-    val item: LiveData<UserDatabaseEntity>
-        get() = _item
+    private val _user = MutableLiveData<UserDatabaseEntity>()
+    val user: LiveData<UserDatabaseEntity>
+        get() = _user
 
-    fun postUser() {
-        userDecorator.getUserData(
+    fun getUser() {
+        userDecorator.getUser(
             uuid = uuid,
-            getUser = { user -> _item.postValue(user) }
+            onUserReceived = { user -> _user.postValue(user) }
         )
     }
 

@@ -9,10 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentFirstScreenBinding
-import com.klinovvlad.task3klinov.db.UserDatabase
-import com.klinovvlad.task3klinov.model.UserDatabaseRepository
-import com.klinovvlad.task3klinov.model.UserNetworkRepository
-import com.klinovvlad.task3klinov.network.api.UserApi
 import com.klinovvlad.task3klinov.utils.BUNDLE_USER_UUID
 import com.klinovvlad.task3klinov.view.adapters.MainAdapter
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModel
@@ -20,16 +16,10 @@ import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModelFactory
 
 class FirstScreenFragment : Fragment() {
     private lateinit var firstScreenBinding: FragmentFirstScreenBinding
-    private val database: UserDatabase by lazy {
-        UserDatabase.getInstance(requireContext())
-    }
     private val viewModel: FirstScreenViewModel by lazy {
         ViewModelProvider(
             viewModelStore,
-            FirstScreenViewModelFactory(
-                UserDatabaseRepository(database.mainDao()),
-                UserNetworkRepository(UserApi)
-            )
+            FirstScreenViewModelFactory(requireContext())
         ).get(FirstScreenViewModel::class.java)
     }
     private val mainAdapter: MainAdapter by lazy {
@@ -44,7 +34,7 @@ class FirstScreenFragment : Fragment() {
                 ?.addToBackStack(null)
                 ?.commit()
         }, onPageEndReached = {
-            viewModel.postData()
+            viewModel.getUsers()
         })
     }
 
@@ -62,7 +52,7 @@ class FirstScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.postData()
+        viewModel.getUsers()
         firstScreenBinding.recyclerviewMain.apply {
             layoutManager = LinearLayoutManager(activity)
             setHasFixedSize(true)

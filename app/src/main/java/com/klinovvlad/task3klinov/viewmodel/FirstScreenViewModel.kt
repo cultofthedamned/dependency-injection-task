@@ -1,11 +1,11 @@
 package com.klinovvlad.task3klinov.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.klinovvlad.task3klinov.db.UserDatabaseEntity
 import com.klinovvlad.task3klinov.model.*
+import com.klinovvlad.task3klinov.utils.USER_DATABASE_LIMIT
 
 class FirstScreenViewModel(
     private val userDecorator: UserDecorator
@@ -15,11 +15,12 @@ class FirstScreenViewModel(
     val dataList: LiveData<List<UserDatabaseEntity>>
         get() = _dataList
 
-    fun postData() {
-        //GetUserDataDecorator.getInstance(Application()).getUsersData { users ->
-        //    _dataList.postValue(users)
-        //}
-        userDecorator.getUsersData { users -> _dataList.postValue(users) }
+    fun getUsers() {
+        userDecorator.getUsers(
+            _dataList.value?.size ?: 0,
+            { users -> _dataList.postValue(users) },
+            USER_DATABASE_LIMIT
+        )
     }
 
 }

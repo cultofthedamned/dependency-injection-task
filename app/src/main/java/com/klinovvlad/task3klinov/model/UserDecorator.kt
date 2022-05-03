@@ -11,18 +11,26 @@ import retrofit2.Callback
 import retrofit2.Response
 
 interface UserDecorator {
-    fun getUsersData(getData: (users: List<UserDatabaseEntity>) -> Unit)
-    fun getUserData(uuid: String, getUser: (user: UserDatabaseEntity) -> Unit)
+    fun getUsers(
+        offset: Int,
+        onUsersReceived: (users: List<UserDatabaseEntity>) -> Unit,
+        pageSize: Int
+    )
+
+    fun getUser(uuid: String, onUserReceived: (user: UserDatabaseEntity) -> Unit)
 }
 
 class GetUserDataDecorator(
     private val userDatabaseRepository: UserDatabaseRepository,
-    private val userNetworkRepository: UserNetworkRepository,
-    private var pagingOffset: Int = 0,
-    private var pagingDataList: List<UserDatabaseEntity> = emptyList()
+    private val userNetworkRepository: UserNetworkRepository
 ) : UserDecorator {
+    private var pagingDataList: List<UserDatabaseEntity> = emptyList()
 
-    override fun getUsersData(getData: (users: List<UserDatabaseEntity>) -> Unit) {
+    override fun getUsers(
+        offset: Int,
+        onUsersReceived: (users: List<UserDatabaseEntity>) -> Unit,
+        pageSize: Int
+    ) {
         val response = userNetworkRepository.getNetworkData()
         response.enqueue(object : Callback<UserNetworkEntity?> {
             override fun onResponse(
@@ -33,7 +41,7 @@ class GetUserDataDecorator(
                     it.toUserDatabaseEntity()
                 } ?: emptyList()
                 val currentUsers = pagingDataList
-                getData(currentUsers + users)
+                onUsersReceived(currentUsers + users)
                 Thread {
                     if (currentUsers.isEmpty()) {
                         userDatabaseRepository.clearAllData()
@@ -46,17 +54,17 @@ class GetUserDataDecorator(
             override fun onFailure(call: Call<UserNetworkEntity?>, t: Throwable) {
                 Thread {
                     val currentUsers = pagingDataList
-                    getData(currentUsers + userDatabaseRepository.getPageData(pagingOffset))
-                    pagingDataList = currentUsers + userDatabaseRepository.getPageData(pagingOffset)
-                    pagingOffset += USER_DATABASE_LIMIT
+                    onUsersReceived(currentUsers + userDatabaseRepository.getPageData(offset))
+                    pagingDataList = currentUsers + userDatabaseRepository.getPageData(offset)
+                    // offset + pageSize
                 }.start()
             }
         })
     }
 
-    override fun getUserData(uuid: String, getUser: (user: UserDatabaseEntity) -> Unit) {
+    override fun getUser(uuid: String, onUserReceived: (user: UserDatabaseEntity) -> Unit) {
         Thread {
-            getUser(userDatabaseRepository.getItem(uuid))
+            onUserReceived(userDatabaseRepository.getItem(uuid))
         }.start()
     }
 
