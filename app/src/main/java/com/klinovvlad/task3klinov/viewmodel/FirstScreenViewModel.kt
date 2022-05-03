@@ -1,7 +1,6 @@
 package com.klinovvlad.task3klinov.viewmodel
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,10 +16,10 @@ class FirstScreenViewModel(
         get() = _dataList
 
     fun postData() {
-        GetUserDataDecorator.getInstance(context = Application()).getUsersData { users ->
-            _dataList.postValue(users)
-        }
-        //userDecorator.getUsersData { users -> _dataList.postValue(users) }
+        //GetUserDataDecorator.getInstance(Application()).getUsersData { users ->
+        //    _dataList.postValue(users)
+        //}
+        userDecorator.getUsersData { users -> _dataList.postValue(users) }
     }
 
 }

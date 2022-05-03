@@ -20,9 +20,9 @@ interface UserDecorator {
 class GetUserDataDecorator(
     private val userDatabaseRepository: UserDatabaseRepository,
     private val userNetworkRepository: UserNetworkRepository,
-    private val pagingOffset: Int? = null
+    private var pagingOffset: Int = 0,
+    private var pagingDataList: List<UserDatabaseEntity> = emptyList()
 ) : UserDecorator {
-    private val pagingDataList = MutableLiveData<List<UserDatabaseEntity>>()
 
     override fun getUsersData(getData: (users: List<UserDatabaseEntity>) -> Unit) {
         val response = userNetworkRepository.getNetworkData()
@@ -34,26 +34,23 @@ class GetUserDataDecorator(
                 val users = response.body()?.results?.map {
                     it.toUserDatabaseEntity()
                 } ?: emptyList()
-                val currentUsers = pagingDataList.value ?: emptyList()
+                val currentUsers = pagingDataList
                 getData(currentUsers + users)
-                pagingDataList.postValue(currentUsers + users)
                 Thread {
                     if (currentUsers.isEmpty()) {
                         userDatabaseRepository.clearAllData()
                     }
                     userDatabaseRepository.insertData(users)
                 }.start()
+                pagingDataList = currentUsers + users
             }
 
             override fun onFailure(call: Call<UserNetworkEntity?>, t: Throwable) {
                 Thread {
-                    val currentUsers = pagingDataList.value ?: emptyList()
-                    val offset = pagingOffset ?: 0
-                    Log.d("resp1", "$offset")
-                    getData(currentUsers + userDatabaseRepository.getPageData(offset))
-                    pagingDataList.postValue(userDatabaseRepository.getPageData(offset))
-                    offset.plus(USER_DATABASE_LIMIT)
-                    Log.d("resp1", "$offset")
+                    val currentUsers = pagingDataList
+                    getData(currentUsers + userDatabaseRepository.getPageData(pagingOffset))
+                    pagingDataList = currentUsers + userDatabaseRepository.getPageData(pagingOffset)
+                    pagingOffset += USER_DATABASE_LIMIT
                 }.start()
             }
         })
