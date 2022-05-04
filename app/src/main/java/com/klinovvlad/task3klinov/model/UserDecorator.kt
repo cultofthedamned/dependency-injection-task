@@ -12,7 +12,6 @@ import retrofit2.Response
 interface UserDecorator {
     fun getUsers(
         offset: Int,
-        pagingDataList: List<UserDatabaseEntity>,
         onUsersReceived: (users: List<UserDatabaseEntity>) -> Unit,
         pageSize: Int
     )
@@ -27,7 +26,6 @@ class GetUserDataDecorator(
 
     override fun getUsers(
         offset: Int,
-        pagingDataList: List<UserDatabaseEntity>,
         onUsersReceived: (users: List<UserDatabaseEntity>) -> Unit,
         pageSize: Int
     ) {
@@ -40,9 +38,9 @@ class GetUserDataDecorator(
                 val users = response.body()?.results?.map {
                     it.toUserDatabaseEntity()
                 } ?: emptyList()
-                onUsersReceived(pagingDataList + users)
+                onUsersReceived(users)
                 Thread {
-                    if (pagingDataList.isEmpty()) {
+                    if (offset == 0) {
                         userDatabaseRepository.clearAllData()
                     }
                     userDatabaseRepository.insertData(users)
@@ -51,10 +49,7 @@ class GetUserDataDecorator(
 
             override fun onFailure(call: Call<UserNetworkEntity?>, t: Throwable) {
                 Thread {
-                    onUsersReceived(
-                        pagingDataList +
-                                userDatabaseRepository.getPageData(offset)
-                    )
+                    onUsersReceived(userDatabaseRepository.getPageData(offset))
                 }.start()
             }
         })
