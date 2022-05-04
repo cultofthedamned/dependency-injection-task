@@ -12,6 +12,7 @@ import retrofit2.Response
 interface UserDecorator {
     fun getUsers(
         offset: Int,
+        pagingDataList: List<UserDatabaseEntity>,
         onUsersReceived: (users: List<UserDatabaseEntity>) -> Unit,
         pageSize: Int
     )
@@ -23,10 +24,10 @@ class GetUserDataDecorator(
     private val userDatabaseRepository: UserDatabaseRepository,
     private val userNetworkRepository: UserNetworkRepository
 ) : UserDecorator {
-    private var pagingDataList: List<UserDatabaseEntity> = emptyList()
 
     override fun getUsers(
         offset: Int,
+        pagingDataList: List<UserDatabaseEntity>,
         onUsersReceived: (users: List<UserDatabaseEntity>) -> Unit,
         pageSize: Int
     ) {
@@ -39,22 +40,21 @@ class GetUserDataDecorator(
                 val users = response.body()?.results?.map {
                     it.toUserDatabaseEntity()
                 } ?: emptyList()
-                val currentUsers = pagingDataList
-                onUsersReceived(currentUsers + users)
+                onUsersReceived(pagingDataList + users)
                 Thread {
-                    if (currentUsers.isEmpty()) {
+                    if (pagingDataList.isEmpty()) {
                         userDatabaseRepository.clearAllData()
                     }
                     userDatabaseRepository.insertData(users)
                 }.start()
-                pagingDataList = currentUsers + users
             }
 
             override fun onFailure(call: Call<UserNetworkEntity?>, t: Throwable) {
                 Thread {
-                    val currentUsers = pagingDataList
-                    onUsersReceived(currentUsers + userDatabaseRepository.getPageData(offset))
-                    pagingDataList = currentUsers + userDatabaseRepository.getPageData(offset)
+                    onUsersReceived(
+                        pagingDataList +
+                                userDatabaseRepository.getPageData(offset)
+                    )
                 }.start()
             }
         })

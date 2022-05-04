@@ -18,6 +18,7 @@ class FirstScreenViewModel(
     fun getUsers() {
         userDecorator.getUsers(
             _dataList.value?.size ?: 0,
+            _dataList.value ?: emptyList(),
             { users -> _dataList.postValue(users) },
             USER_DATABASE_LIMIT
         )
