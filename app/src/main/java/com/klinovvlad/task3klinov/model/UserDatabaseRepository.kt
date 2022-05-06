@@ -17,10 +17,6 @@ class UserDatabaseRepository(private val userDao: UserDao) {
         return userDao.getPageData(offset)
     }
 
-    fun getAllData(): List<UserDatabaseEntity> {
-        return userDao.getAllData()
-    }
-
     fun getItem(data: String): UserDatabaseEntity {
         return userDao.getItemData(data)
     }

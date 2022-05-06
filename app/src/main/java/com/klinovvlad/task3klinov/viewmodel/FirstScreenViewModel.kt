@@ -18,7 +18,7 @@ class FirstScreenViewModel(
     fun getUsers() {
         val currentUsers = _dataList.value ?: emptyList()
         userDecorator.getUsers(
-            _dataList.value?.size ?: 0,
+            currentUsers.size,
             { users -> _dataList.postValue(currentUsers + users) },
             USER_DATABASE_LIMIT
         )
