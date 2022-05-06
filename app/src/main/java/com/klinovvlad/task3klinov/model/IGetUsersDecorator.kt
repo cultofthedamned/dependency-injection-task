@@ -9,20 +9,24 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-interface UserDecorator {
+interface IGetUsersDecorator {
     fun getUsers(
         offset: Int,
         onUsersReceived: (users: List<UserDatabaseEntity>) -> Unit,
         pageSize: Int
     )
+}
 
+interface IGetCertainUserDecorator {
     fun getUser(uuid: String, onUserReceived: (user: UserDatabaseEntity) -> Unit)
 }
 
-class GetUserDataDecorator(
+interface IUsersDecorator : IGetCertainUserDecorator, IGetUsersDecorator
+
+class GetUsersDataDecorator(
     private val userDatabaseRepository: UserDatabaseRepository,
     private val userNetworkRepository: UserNetworkRepository
-) : UserDecorator {
+) : IUsersDecorator {
 
     override fun getUsers(
         offset: Int,
@@ -63,14 +67,14 @@ class GetUserDataDecorator(
 
     companion object {
         @Volatile
-        private var INSTANCE: GetUserDataDecorator? = null
+        private var INSTANCE: GetUsersDataDecorator? = null
         private val LOCK = Any()
 
-        fun getInstance(context: Context): GetUserDataDecorator {
+        fun getInstance(context: Context): GetUsersDataDecorator {
             if (INSTANCE == null) {
                 synchronized(LOCK) {
                     if (INSTANCE == null) {
-                        INSTANCE = GetUserDataDecorator(
+                        INSTANCE = GetUsersDataDecorator(
                             UserDatabaseRepository(
                                 UserDatabase.getInstance(context).mainDao()
                             ),

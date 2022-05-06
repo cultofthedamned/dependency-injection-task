@@ -3,7 +3,7 @@ package com.klinovvlad.task3klinov.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.klinovvlad.task3klinov.model.GetUserDataDecorator
+import com.klinovvlad.task3klinov.model.GetUsersDataDecorator
 
 class SecondScreenViewModelFactory(
     private val uuid: String,
@@ -13,7 +13,7 @@ class SecondScreenViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SecondScreenViewModel::class.java)) {
             return SecondScreenViewModel(
-                uuid, GetUserDataDecorator.getInstance(context)
+                uuid, GetUsersDataDecorator.getInstance(context)
             ) as T
         }
         throw IllegalArgumentException("UnknownViewModel")

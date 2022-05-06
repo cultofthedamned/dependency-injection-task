@@ -8,7 +8,7 @@ import com.klinovvlad.task3klinov.model.*
 import com.klinovvlad.task3klinov.utils.USER_DATABASE_LIMIT
 
 class FirstScreenViewModel(
-    private val userDecorator: UserDecorator
+    private val iUsersDecorator: IUsersDecorator
 ) : ViewModel() {
 
     private val _dataList = MutableLiveData<List<UserDatabaseEntity>>()
@@ -17,7 +17,7 @@ class FirstScreenViewModel(
 
     fun getUsers() {
         val currentUsers = _dataList.value ?: emptyList()
-        userDecorator.getUsers(
+        iUsersDecorator.getUsers(
             currentUsers.size,
             { users -> _dataList.postValue(currentUsers + users) },
             USER_DATABASE_LIMIT
