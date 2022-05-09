@@ -27,6 +27,7 @@ class GetUsersDataDecorator(
     private val userDatabaseRepository: UserDatabaseRepository,
     private val userNetworkRepository: UserNetworkRepository
 ) : IUsersDecorator {
+    //private val userDB = DaggerApplicationComponent.create().getDatabaseRepository()
 
     override fun getUsers(
         offset: Int,
@@ -48,6 +49,7 @@ class GetUsersDataDecorator(
                         userDatabaseRepository.clearAllData()
                     }
                     userDatabaseRepository.insertData(users)
+                    //userDB.insertData(users)
                 }.start()
             }
 

@@ -2,8 +2,9 @@ package com.klinovvlad.task3klinov.model
 
 import com.klinovvlad.task3klinov.db.UserDao
 import com.klinovvlad.task3klinov.db.UserDatabaseEntity
+import javax.inject.Inject
 
-class UserDatabaseRepository(private val userDao: UserDao) {
+class UserDatabaseRepository @Inject constructor(private val userDao: UserDao) {
 
     fun insertData(data: List<UserDatabaseEntity>) {
         userDao.insertData(data)

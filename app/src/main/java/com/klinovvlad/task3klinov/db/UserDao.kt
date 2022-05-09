@@ -2,6 +2,7 @@ package com.klinovvlad.task3klinov.db
 
 import androidx.room.*
 import com.klinovvlad.task3klinov.utils.USER_DATABASE_LIMIT
+import javax.inject.Inject
 
 @Dao
 interface UserDao {

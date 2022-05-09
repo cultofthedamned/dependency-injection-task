@@ -2,8 +2,8 @@ package com.klinovvlad.task3klinov.db
 
 import android.content.Context
 import androidx.room.*
-import androidx.sqlite.db.SupportSQLiteOpenHelper
 import com.klinovvlad.task3klinov.utils.USER_DATABASE
+import javax.inject.Inject
 
 @Database(entities = [UserDatabaseEntity::class], version = 1)
 abstract class UserDatabase : RoomDatabase() {
