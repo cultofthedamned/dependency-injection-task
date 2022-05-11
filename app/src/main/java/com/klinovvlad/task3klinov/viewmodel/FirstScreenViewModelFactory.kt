@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.klinovvlad.task3klinov.model.GetUsersDataDecorator
-import com.klinovvlad.task3klinov.model.UserDatabaseRepository
-import com.klinovvlad.task3klinov.model.UserNetworkRepository
 import javax.inject.Inject
 
 class FirstScreenViewModelFactory @Inject constructor(

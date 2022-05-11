@@ -10,9 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentFirstScreenBinding
 import com.klinovvlad.task3klinov.di.MyApplication
-import com.klinovvlad.task3klinov.model.GetUsersDataDecorator
-import com.klinovvlad.task3klinov.model.UserDatabaseRepository
-import com.klinovvlad.task3klinov.model.UserNetworkRepository
 import com.klinovvlad.task3klinov.utils.BUNDLE_USER_UUID
 import com.klinovvlad.task3klinov.view.adapters.MainAdapter
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModel
