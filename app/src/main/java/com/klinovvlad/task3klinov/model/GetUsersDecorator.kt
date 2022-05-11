@@ -78,16 +78,15 @@ class GetUsersDataDecorator @Inject constructor(
         private var INSTANCE: GetUsersDataDecorator? = null
         private val LOCK = Any()
 
-        fun getInstance(
-            userDatabaseRepository: UserDatabaseRepository,
-            userNetworkRepository: UserNetworkRepository
-        ): GetUsersDataDecorator {
+        fun getInstance(context: Context): GetUsersDataDecorator {
             if (INSTANCE == null) {
                 synchronized(LOCK) {
                     if (INSTANCE == null) {
                         INSTANCE = GetUsersDataDecorator(
-                            userDatabaseRepository,
-                            userNetworkRepository
+                            UserDatabaseRepository(
+                                UserDatabase.getInstance(context).mainDao()
+                            ),
+                            UserNetworkRepository(UserApi.getInstance())
                         )
                     }
                 }

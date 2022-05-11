@@ -1,5 +1,6 @@
 package com.klinovvlad.task3klinov.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.klinovvlad.task3klinov.model.GetUsersDataDecorator
@@ -8,17 +9,13 @@ import com.klinovvlad.task3klinov.model.UserNetworkRepository
 import javax.inject.Inject
 
 class FirstScreenViewModelFactory @Inject constructor(
-    private val userDatabaseRepository: UserDatabaseRepository,
-    private val userNetworkRepository: UserNetworkRepository
+    private val context: Context
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FirstScreenViewModel::class.java)) {
             return FirstScreenViewModel(
-                GetUsersDataDecorator.getInstance(
-                    userDatabaseRepository,
-                    userNetworkRepository
-                )
+                GetUsersDataDecorator.getInstance(context)
             ) as T
         }
         throw IllegalArgumentException("UnknownViewModel")

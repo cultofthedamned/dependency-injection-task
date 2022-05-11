@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentSecondScreenBinding
 import com.klinovvlad.task3klinov.di.MyApplication
+import com.klinovvlad.task3klinov.di.modules.SecondScreenViewModelComponent
 import com.klinovvlad.task3klinov.utils.BUNDLE_USER_UUID
 import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModel
 import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModelFactory
@@ -17,14 +18,17 @@ import javax.inject.Inject
 
 class SecondScreenFragment : Fragment() {
     private lateinit var secondScreenBinding: FragmentSecondScreenBinding
+    @Inject
+    lateinit var factory: SecondScreenViewModelComponent.Factory
     private val viewModel: SecondScreenViewModel by lazy {
         ViewModelProvider(
             viewModelStore,
-            secondScreenViewModelFactory
+            SecondScreenViewModelFactory(
+                requireArguments().getString(BUNDLE_USER_UUID) ?: "",
+                factory
+            )
         ).get(SecondScreenViewModel::class.java)
     }
-    @Inject
-    private lateinit var secondScreenViewModelFactory: SecondScreenViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
