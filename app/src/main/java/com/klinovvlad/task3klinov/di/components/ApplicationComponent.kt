@@ -1,11 +1,21 @@
 package com.klinovvlad.task3klinov.di.components
 
-import com.klinovvlad.task3klinov.model.UserDatabaseRepository
-import com.klinovvlad.task3klinov.model.UserNetworkRepository
+import com.klinovvlad.task3klinov.di.modules.ContextModule
+import com.klinovvlad.task3klinov.di.modules.DatabaseModule
+import com.klinovvlad.task3klinov.di.modules.NetworkModule
+import com.klinovvlad.task3klinov.view.ui.fragments.FirstScreenFragment
 import dagger.Component
 
-@Component
+@Component(
+    modules = [
+        DatabaseModule::class,
+        NetworkModule::class,
+        //UserDecoratorModule::class,
+        ContextModule::class
+    ]
+)
 interface ApplicationComponent {
-    fun getDatabaseRepository(): UserDatabaseRepository
-    fun getNetworkRepository(): UserNetworkRepository
+
+    fun inject(fragment: FirstScreenFragment)
+
 }

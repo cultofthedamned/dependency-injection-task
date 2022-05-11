@@ -9,10 +9,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentFirstScreenBinding
+import com.klinovvlad.task3klinov.di.MyApplication
+import com.klinovvlad.task3klinov.model.GetUsersDataDecorator
+import com.klinovvlad.task3klinov.model.UserDatabaseRepository
+import com.klinovvlad.task3klinov.model.UserNetworkRepository
 import com.klinovvlad.task3klinov.utils.BUNDLE_USER_UUID
 import com.klinovvlad.task3klinov.view.adapters.MainAdapter
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModel
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModelFactory
+import javax.inject.Inject
 
 class FirstScreenFragment : Fragment() {
     private lateinit var firstScreenBinding: FragmentFirstScreenBinding
@@ -37,6 +42,12 @@ class FirstScreenFragment : Fragment() {
             viewModel.getUsers()
         })
     }
+    @Inject
+    lateinit var userDatabaseRepository: UserDatabaseRepository
+    @Inject
+    lateinit var userNetworkRepository: UserNetworkRepository
+    @Inject
+    lateinit var usersDataDecorator: GetUsersDataDecorator
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +63,7 @@ class FirstScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity?.application as MyApplication).appComponent.inject(this)
         viewModel.getUsers()
         firstScreenBinding.recyclerviewMain.apply {
             layoutManager = LinearLayoutManager(activity)

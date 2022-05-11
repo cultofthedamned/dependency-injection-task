@@ -1,16 +1,23 @@
 package com.klinovvlad.task3klinov.di.modules
 
-import android.app.Application
+import android.content.Context
 import com.klinovvlad.task3klinov.db.UserDao
 import com.klinovvlad.task3klinov.db.UserDatabase
 import com.klinovvlad.task3klinov.model.UserDatabaseRepository
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 
 @Module
 class DatabaseModule {
+
     @Provides
-    fun provideDatabaseRepository(): UserDatabaseRepository =
-        UserDatabaseRepository(UserDatabase.getInstance(Application()).mainDao())
+    fun provideDatabase(context: Context): UserDatabase = UserDatabase.getInstance(context)
+
+    @Provides
+    fun provideUserDao(userDatabase: UserDatabase): UserDao = userDatabase.mainDao()
+
+    @Provides
+    fun provideUserDatabaseRepository(userDao: UserDao): UserDatabaseRepository =
+        UserDatabaseRepository(userDao)
+
 }

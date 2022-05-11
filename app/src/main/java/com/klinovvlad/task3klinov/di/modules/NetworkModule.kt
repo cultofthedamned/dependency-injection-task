@@ -7,6 +7,12 @@ import dagger.Provides
 
 @Module
 class NetworkModule {
+
     @Provides
-    fun provideNetworkRepository(): UserNetworkRepository = UserNetworkRepository(UserApi)
+    fun provideUserApi(): UserApi.Companion = UserApi.Companion
+
+    @Provides
+    fun provideNetworkRepository(userApi: UserApi.Companion): UserNetworkRepository =
+        UserNetworkRepository(userApi)
+
 }
