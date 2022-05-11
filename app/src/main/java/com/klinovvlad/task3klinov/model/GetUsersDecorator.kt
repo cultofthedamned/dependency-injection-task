@@ -22,13 +22,7 @@ interface GetCertainUserDecorator {
     fun getUser(uuid: String, onUserReceived: (user: UserDatabaseEntity) -> Unit)
 }
 
-interface UsersDecorator : GetCertainUserDecorator, GetUsersDecorator {
-
-    companion object {
-
-    }
-
-}
+interface UsersDecorator : GetCertainUserDecorator, GetUsersDecorator
 
 class GetUsersDataDecorator @Inject constructor(
     private val userDatabaseRepository: UserDatabaseRepository,

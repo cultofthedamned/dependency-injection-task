@@ -11,8 +11,4 @@ class NetworkModule {
     @Provides
     fun provideUserApi(): UserApi = UserApi.getInstance()
 
-    @Provides
-    fun provideNetworkRepository(userApi: UserApi): UserNetworkRepository =
-        UserNetworkRepository(userApi)
-
 }

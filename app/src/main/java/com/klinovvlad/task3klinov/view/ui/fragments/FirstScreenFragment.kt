@@ -18,6 +18,8 @@ import javax.inject.Inject
 
 class FirstScreenFragment : Fragment() {
     private lateinit var firstScreenBinding: FragmentFirstScreenBinding
+    @Inject
+    lateinit var firstScreenViewModelFactory: FirstScreenViewModelFactory
     private val viewModel: FirstScreenViewModel by lazy {
         ViewModelProvider(
             viewModelStore,
@@ -39,8 +41,6 @@ class FirstScreenFragment : Fragment() {
             viewModel.getUsers()
         })
     }
-    @Inject
-    lateinit var firstScreenViewModelFactory: FirstScreenViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

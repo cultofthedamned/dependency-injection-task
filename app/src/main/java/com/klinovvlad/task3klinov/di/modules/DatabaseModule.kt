@@ -16,8 +16,4 @@ class DatabaseModule {
     @Provides
     fun provideUserDao(userDatabase: UserDatabase): UserDao = userDatabase.mainDao()
 
-    @Provides
-    fun provideUserDatabaseRepository(userDao: UserDao): UserDatabaseRepository =
-        UserDatabaseRepository(userDao)
-
 }
