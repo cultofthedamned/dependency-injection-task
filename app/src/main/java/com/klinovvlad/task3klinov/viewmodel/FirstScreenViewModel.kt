@@ -6,10 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.klinovvlad.task3klinov.db.UserDatabaseEntity
 import com.klinovvlad.task3klinov.model.*
 import com.klinovvlad.task3klinov.utils.USER_DATABASE_LIMIT
+import javax.inject.Inject
 
-class FirstScreenViewModel(
-    private val iUsersDecorator: IUsersDecorator
-) : ViewModel() {
+class FirstScreenViewModel(private val usersDecorator: UsersDecorator) : ViewModel() {
 
     private val _dataList = MutableLiveData<List<UserDatabaseEntity>>()
     val dataList: LiveData<List<UserDatabaseEntity>>
@@ -17,7 +16,7 @@ class FirstScreenViewModel(
 
     fun getUsers() {
         val currentUsers = _dataList.value ?: emptyList()
-        iUsersDecorator.getUsers(
+        usersDecorator.getUsers(
             currentUsers.size,
             { users -> _dataList.postValue(currentUsers + users) },
             USER_DATABASE_LIMIT

@@ -24,7 +24,7 @@ class FirstScreenFragment : Fragment() {
     private val viewModel: FirstScreenViewModel by lazy {
         ViewModelProvider(
             viewModelStore,
-            FirstScreenViewModelFactory(requireContext())
+            firstScreenViewModelFactory
         ).get(FirstScreenViewModel::class.java)
     }
     private val mainAdapter: MainAdapter by lazy {
@@ -43,11 +43,7 @@ class FirstScreenFragment : Fragment() {
         })
     }
     @Inject
-    lateinit var userDatabaseRepository: UserDatabaseRepository
-    @Inject
-    lateinit var userNetworkRepository: UserNetworkRepository
-    @Inject
-    lateinit var usersDataDecorator: GetUsersDataDecorator
+    lateinit var firstScreenViewModelFactory: FirstScreenViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

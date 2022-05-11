@@ -9,10 +9,10 @@ import dagger.Provides
 class NetworkModule {
 
     @Provides
-    fun provideUserApi(): UserApi.Companion = UserApi.Companion
+    fun provideUserApi(): UserApi = UserApi.getInstance()
 
     @Provides
-    fun provideNetworkRepository(userApi: UserApi.Companion): UserNetworkRepository =
+    fun provideNetworkRepository(userApi: UserApi): UserNetworkRepository =
         UserNetworkRepository(userApi)
 
 }

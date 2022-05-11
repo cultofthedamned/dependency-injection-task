@@ -4,6 +4,7 @@ import com.klinovvlad.task3klinov.di.modules.ContextModule
 import com.klinovvlad.task3klinov.di.modules.DatabaseModule
 import com.klinovvlad.task3klinov.di.modules.NetworkModule
 import com.klinovvlad.task3klinov.view.ui.fragments.FirstScreenFragment
+import com.klinovvlad.task3klinov.view.ui.fragments.SecondScreenFragment
 import dagger.Component
 
 @Component(
@@ -16,5 +17,6 @@ import dagger.Component
 interface ApplicationComponent {
 
     fun inject(fragment: FirstScreenFragment)
+    fun inject(fragment: SecondScreenFragment)
 
 }

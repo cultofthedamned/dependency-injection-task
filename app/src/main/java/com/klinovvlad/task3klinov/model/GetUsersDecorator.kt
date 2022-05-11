@@ -10,7 +10,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-interface IGetUsersDecorator {
+interface GetUsersDecorator {
     fun getUsers(
         offset: Int,
         onUsersReceived: (users: List<UserDatabaseEntity>) -> Unit,
@@ -18,16 +18,22 @@ interface IGetUsersDecorator {
     )
 }
 
-interface IGetCertainUserDecorator {
+interface GetCertainUserDecorator {
     fun getUser(uuid: String, onUserReceived: (user: UserDatabaseEntity) -> Unit)
 }
 
-interface IUsersDecorator : IGetCertainUserDecorator, IGetUsersDecorator
+interface UsersDecorator : GetCertainUserDecorator, GetUsersDecorator {
+
+    companion object {
+
+    }
+
+}
 
 class GetUsersDataDecorator @Inject constructor(
     private val userDatabaseRepository: UserDatabaseRepository,
     private val userNetworkRepository: UserNetworkRepository
-) : IUsersDecorator {
+) : UsersDecorator {
 
     override fun getUsers(
         offset: Int,
@@ -72,15 +78,16 @@ class GetUsersDataDecorator @Inject constructor(
         private var INSTANCE: GetUsersDataDecorator? = null
         private val LOCK = Any()
 
-        fun getInstance(context: Context): GetUsersDataDecorator {
+        fun getInstance(
+            userDatabaseRepository: UserDatabaseRepository,
+            userNetworkRepository: UserNetworkRepository
+        ): GetUsersDataDecorator {
             if (INSTANCE == null) {
                 synchronized(LOCK) {
                     if (INSTANCE == null) {
                         INSTANCE = GetUsersDataDecorator(
-                            UserDatabaseRepository(
-                                UserDatabase.getInstance(context).mainDao()
-                            ),
-                            UserNetworkRepository(UserApi)
+                            userDatabaseRepository,
+                            userNetworkRepository
                         )
                     }
                 }
