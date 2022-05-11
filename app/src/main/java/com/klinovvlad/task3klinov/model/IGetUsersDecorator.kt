@@ -3,7 +3,6 @@ package com.klinovvlad.task3klinov.model
 import android.content.Context
 import com.klinovvlad.task3klinov.db.UserDatabase
 import com.klinovvlad.task3klinov.db.UserDatabaseEntity
-import com.klinovvlad.task3klinov.di.MyApplication
 import com.klinovvlad.task3klinov.network.api.UserApi
 import com.klinovvlad.task3klinov.utils.toUserDatabaseEntity
 import retrofit2.Call

@@ -10,7 +10,6 @@ import dagger.Component
     modules = [
         DatabaseModule::class,
         NetworkModule::class,
-        //UserDecoratorModule::class,
         ContextModule::class
     ]
 )
