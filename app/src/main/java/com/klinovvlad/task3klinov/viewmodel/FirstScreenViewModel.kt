@@ -6,9 +6,13 @@ import androidx.lifecycle.ViewModel
 import com.klinovvlad.task3klinov.db.UserDatabaseEntity
 import com.klinovvlad.task3klinov.model.*
 import com.klinovvlad.task3klinov.utils.USER_DATABASE_LIMIT
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-class FirstScreenViewModel(private val usersDecorator: UsersDecorator) : ViewModel() {
+@HiltViewModel
+class FirstScreenViewModel @Inject constructor(
+    private val usersDecorator: UsersDecorator
+) : ViewModel() {
 
     private val _dataList = MutableLiveData<List<UserDatabaseEntity>>()
     val dataList: LiveData<List<UserDatabaseEntity>>

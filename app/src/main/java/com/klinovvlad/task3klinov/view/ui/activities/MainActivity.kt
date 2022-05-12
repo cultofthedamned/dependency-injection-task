@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.ActivityMainBinding
 import com.klinovvlad.task3klinov.view.ui.fragments.FirstScreenFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

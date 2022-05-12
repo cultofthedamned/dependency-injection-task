@@ -5,27 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentFirstScreenBinding
-import com.klinovvlad.task3klinov.di.MyApplication
 import com.klinovvlad.task3klinov.utils.BUNDLE_USER_UUID
 import com.klinovvlad.task3klinov.view.adapters.MainAdapter
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModel
-import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModelFactory
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FirstScreenFragment : Fragment() {
     private lateinit var firstScreenBinding: FragmentFirstScreenBinding
-    @Inject
-    lateinit var firstScreenViewModelFactory: FirstScreenViewModelFactory
-    private val viewModel: FirstScreenViewModel by lazy {
-        ViewModelProvider(
-            viewModelStore,
-            firstScreenViewModelFactory
-        ).get(FirstScreenViewModel::class.java)
-    }
+    private val viewModel: FirstScreenViewModel by viewModels()
     private val mainAdapter: MainAdapter by lazy {
         MainAdapter(onItemClick = {
             val bundle = Bundle()
@@ -56,7 +48,6 @@ class FirstScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity?.application as MyApplication).appComponent.inject(this)
         viewModel.getUsers()
         firstScreenBinding.recyclerviewMain.apply {
             layoutManager = LinearLayoutManager(activity)
