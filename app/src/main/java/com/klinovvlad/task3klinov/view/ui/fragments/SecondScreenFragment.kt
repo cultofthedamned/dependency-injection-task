@@ -12,15 +12,18 @@ import com.klinovvlad.task3klinov.databinding.FragmentSecondScreenBinding
 import com.klinovvlad.task3klinov.utils.BUNDLE_USER_UUID
 import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SecondScreenFragment : Fragment() {
     private lateinit var secondScreenBinding: FragmentSecondScreenBinding
-    private val viewModel: SecondScreenViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.uuid = requireArguments().getString(BUNDLE_USER_UUID) ?: ""
+    @Inject
+    lateinit var factory: SecondScreenViewModel.Factory
+    private val viewModel: SecondScreenViewModel by viewModels {
+        SecondScreenViewModel.provideFactory(
+            factory,
+            requireArguments().getString(BUNDLE_USER_UUID) ?: ""
+        )
     }
 
     override fun onCreateView(
