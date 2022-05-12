@@ -19,8 +19,8 @@ class SecondScreenFragment : Fragment() {
     private lateinit var secondScreenBinding: FragmentSecondScreenBinding
     private val viewModel: SecondScreenViewModel by viewModels()
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewModel.uuid = requireArguments().getString(BUNDLE_USER_UUID) ?: ""
     }
 
