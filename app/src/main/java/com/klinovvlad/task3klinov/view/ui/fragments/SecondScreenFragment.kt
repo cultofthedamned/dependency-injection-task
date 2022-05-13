@@ -5,24 +5,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentSecondScreenBinding
 import com.klinovvlad.task3klinov.utils.BUNDLE_USER_UUID
 import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModel
-import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModelFactory
+import org.koin.android.ext.android.getKoin
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.scope.emptyState
+import org.koin.androidx.viewmodel.scope.viewModel
+import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
 
 class SecondScreenFragment : Fragment() {
     private lateinit var secondScreenBinding: FragmentSecondScreenBinding
-    private val viewModel: SecondScreenViewModel by lazy {
-        ViewModelProvider(
-            viewModelStore,
-            SecondScreenViewModelFactory(
-                requireArguments().getString(BUNDLE_USER_UUID) ?: "",
-                requireContext()
-            )
-        ).get(SecondScreenViewModel::class.java)
+    private val viewModel: SecondScreenViewModel by viewModel {
+        parametersOf(
+            requireArguments().getString(
+                BUNDLE_USER_UUID
+            ) ?: ""
+        )
     }
 
     override fun onCreateView(

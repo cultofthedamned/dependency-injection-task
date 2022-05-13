@@ -5,23 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentFirstScreenBinding
 import com.klinovvlad.task3klinov.utils.BUNDLE_USER_UUID
 import com.klinovvlad.task3klinov.view.adapters.MainAdapter
 import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModel
-import com.klinovvlad.task3klinov.viewmodel.FirstScreenViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FirstScreenFragment : Fragment() {
     private lateinit var firstScreenBinding: FragmentFirstScreenBinding
-    private val viewModel: FirstScreenViewModel by lazy {
-        ViewModelProvider(
-            viewModelStore,
-            FirstScreenViewModelFactory(requireContext())
-        ).get(FirstScreenViewModel::class.java)
-    }
+    private val viewModel by viewModel<FirstScreenViewModel>()
     private val mainAdapter: MainAdapter by lazy {
         MainAdapter(onItemClick = {
             val bundle = Bundle()

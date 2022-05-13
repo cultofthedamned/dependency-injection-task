@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-interface IGetUsersDecorator {
+interface GetUsersDecorator {
     fun getUsers(
         offset: Int,
         onUsersReceived: (users: List<UserDatabaseEntity>) -> Unit,
@@ -17,16 +17,16 @@ interface IGetUsersDecorator {
     )
 }
 
-interface IGetCertainUserDecorator {
+interface GetCertainUserDecorator {
     fun getUser(uuid: String, onUserReceived: (user: UserDatabaseEntity) -> Unit)
 }
 
-interface IUsersDecorator : IGetCertainUserDecorator, IGetUsersDecorator
+interface UsersDecorator : GetCertainUserDecorator, GetUsersDecorator
 
 class GetUsersDataDecorator(
     private val userDatabaseRepository: UserDatabaseRepository,
     private val userNetworkRepository: UserNetworkRepository
-) : IUsersDecorator {
+) : UsersDecorator {
 
     override fun getUsers(
         offset: Int,
@@ -78,7 +78,7 @@ class GetUsersDataDecorator(
                             UserDatabaseRepository(
                                 UserDatabase.getInstance(context).mainDao()
                             ),
-                            UserNetworkRepository(UserApi)
+                            UserNetworkRepository(UserApi.getInstance())
                         )
                     }
                 }
