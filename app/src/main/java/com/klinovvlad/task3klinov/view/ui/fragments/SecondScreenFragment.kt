@@ -10,12 +10,8 @@ import com.klinovvlad.task3klinov.R
 import com.klinovvlad.task3klinov.databinding.FragmentSecondScreenBinding
 import com.klinovvlad.task3klinov.utils.BUNDLE_USER_UUID
 import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModel
-import org.koin.android.ext.android.getKoin
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.androidx.viewmodel.scope.emptyState
-import org.koin.androidx.viewmodel.scope.viewModel
 import org.koin.core.parameter.parametersOf
-import org.koin.core.qualifier.named
 
 class SecondScreenFragment : Fragment() {
     private lateinit var secondScreenBinding: FragmentSecondScreenBinding
