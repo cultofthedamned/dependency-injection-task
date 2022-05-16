@@ -3,7 +3,7 @@ package com.klinovvlad.task3klinov.di
 import android.app.Application
 import com.klinovvlad.task3klinov.di.modules.dataModule
 import com.klinovvlad.task3klinov.di.modules.decoratorModule
-import com.klinovvlad.task3klinov.di.modules.firstScreenViewModelModule
+import com.klinovvlad.task3klinov.di.modules.ViewModelsModule
 import com.klinovvlad.task3klinov.di.modules.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -18,7 +18,7 @@ class App : Application() {
         startKoin {
             androidLogger(Level.ERROR)
             androidContext(this@App)
-            modules(dataModule, networkModule, decoratorModule, firstScreenViewModelModule)
+            modules(dataModule, networkModule, decoratorModule, ViewModelsModule)
         }
 
     }

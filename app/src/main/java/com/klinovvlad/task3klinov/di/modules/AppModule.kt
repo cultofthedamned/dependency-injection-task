@@ -5,7 +5,7 @@ import com.klinovvlad.task3klinov.viewmodel.SecondScreenViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val firstScreenViewModelModule = module {
+val ViewModelsModule = module {
 
     viewModel {
         FirstScreenViewModel(usersDecorator = get())

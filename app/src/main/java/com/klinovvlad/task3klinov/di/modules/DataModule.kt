@@ -11,7 +11,7 @@ val dataModule = module {
     }
 
     single {
-        UserDatabase.getInstance(context = get()).mainDao()
+        get<UserDatabase>().mainDao()
     }
 
     single {

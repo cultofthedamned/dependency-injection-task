@@ -1,9 +1,6 @@
 package com.klinovvlad.task3klinov.model
 
-import android.content.Context
-import com.klinovvlad.task3klinov.db.UserDatabase
 import com.klinovvlad.task3klinov.db.UserDatabaseEntity
-import com.klinovvlad.task3klinov.network.api.UserApi
 import com.klinovvlad.task3klinov.utils.toUserDatabaseEntity
 import retrofit2.Call
 import retrofit2.Callback
@@ -63,28 +60,6 @@ class GetUsersDataDecorator(
         Thread {
             onUserReceived(userDatabaseRepository.getItem(uuid))
         }.start()
-    }
-
-    companion object {
-        @Volatile
-        private var INSTANCE: GetUsersDataDecorator? = null
-        private val LOCK = Any()
-
-        fun getInstance(context: Context): GetUsersDataDecorator {
-            if (INSTANCE == null) {
-                synchronized(LOCK) {
-                    if (INSTANCE == null) {
-                        INSTANCE = GetUsersDataDecorator(
-                            UserDatabaseRepository(
-                                UserDatabase.getInstance(context).mainDao()
-                            ),
-                            UserNetworkRepository(UserApi.getInstance())
-                        )
-                    }
-                }
-            }
-            return INSTANCE!!
-        }
     }
 
 }
